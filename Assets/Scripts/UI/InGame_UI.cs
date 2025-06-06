@@ -21,7 +21,7 @@ public class InGame_UI : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
-            Destroy(gameObject); 
+            Destroy(gameObject);
         }
         else
         {
@@ -82,3 +82,4 @@ public class InGame_UI : MonoBehaviour
         }
     }
 }
+// Unfinishied, the fill iamge animation still can't work
