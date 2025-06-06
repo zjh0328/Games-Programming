@@ -1,0 +1,23 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Enemy_AnimationTrigger : MonoBehaviour
+{
+    private Enemy enemy => GetComponentInParent<Enemy>();
+
+    private void AnimationTrigger()
+    {
+        enemy.AnimationTrigger();
+    }
+
+    private void AttackTrigger()
+    {
+       enemy.AttackTrigger();
+    }
+
+    private void SpecialAttackTrigger()
+    {
+        enemy.SpecialAttackTrigger();
+    }
+}
