@@ -4,10 +4,8 @@ public class EnemyState
 {
     protected EnemyStateMachine stateMachine;
     protected Enemy enemyBase;
-
     protected Rigidbody2D rb;
     protected Animator anim;
-
     private string animBoolName;
     protected bool triggerCalled;
     protected float DelayTime;

@@ -14,6 +14,7 @@ public class Archer : Enemy
     public ArcherBattleState BattleState { get; private set; }
     public ArcherAttackState AttackState { get; private set; }
     public ArcherDeathState DeathState { get; private set; }
+    
     #endregion
 
     protected override void Awake()
