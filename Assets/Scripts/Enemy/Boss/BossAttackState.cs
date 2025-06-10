@@ -18,6 +18,7 @@ public class BossAttackState : EnemyState
         DelayTime = 0.2f;
     }
 
+
     public override void Exit()
     {
         base.Exit();

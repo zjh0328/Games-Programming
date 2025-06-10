@@ -100,6 +100,10 @@ public class Enemy : Entity
             }
         }
     }
+    public virtual void TriggerDoubleAttackHit() { }
+
+    public virtual void TriggerFullSkillDamage() { }
+
 
     protected override void OnDrawGizmos()
     {

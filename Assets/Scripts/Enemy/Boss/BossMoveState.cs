@@ -23,6 +23,15 @@ public class BossMoveState : BossGroundedState
     {
         base.Update();
 
+        var detection = boss.IsPlayerDetected();
+
+        if (detection.collider != null)
+        {
+            boss.EnterBattleState();
+            return;
+        }
+
+
         if (boss.stateMachine.CurrentState != this)
             return;
 

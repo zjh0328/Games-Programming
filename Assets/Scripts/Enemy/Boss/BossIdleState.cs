@@ -12,7 +12,6 @@ public class BossIdleState : BossGroundedState
     public override void Enter()
     {
         base.Enter();
-        DelayTime = Boss.patrolTime;
     }
 
     public override void Exit()
@@ -23,18 +22,14 @@ public class BossIdleState : BossGroundedState
     public override void Update()
     {
         base.Update();
+        var detection = boss.IsPlayerDetected();
 
-        if (stateMachine.CurrentState != Boss.IdleState)
+        if (detection.collider != null)
         {
+            boss.EnterBattleState();
             return;
         }
 
-        Boss.SetVelocity(0, rb.velocity.y);
-
-        if (DelayTime < 0)
-        {
-            Boss.Flip();
-            stateMachine.ChangeState(Boss.MoveState);
-        }
+        boss.SetVelocity(0, rb.velocity.y);
     }
 }

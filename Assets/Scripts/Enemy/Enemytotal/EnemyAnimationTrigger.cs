@@ -13,11 +13,16 @@ public class EnemyAnimationTrigger : MonoBehaviour
 
     private void AttackTrigger()
     {
-       enemy.AttackTrigger();
+        enemy.AttackTrigger();
     }
 
     private void SpecialAttackTrigger()
     {
         enemy.SpecialAttackTrigger();
+    }
+    
+    private void TriggerFullSkillDamage()
+    {
+        enemy.TriggerFullSkillDamage();
     }
 }

@@ -10,7 +10,7 @@ public class UI : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private GameObject Pause_UI;
     [SerializeField] private GameObject InGame_UI;
-
+    
     [Header("Try again")]
     public FadeScreen_UI fadeScreen;
     [SerializeField] private GameObject diedText;
@@ -78,14 +78,14 @@ public class UI : MonoBehaviour
             GameManager.instance?.PauseGame(true);
     }
 
-    public void SwitchToThankYouText(string achievedEndingText)
+    public void SwitchToThankYouText()
     {
         uiKeyFunctioning = false;
         fadeScreen.FadeOut();
-        StartCoroutine(ThankYouTextCoroutine(achievedEndingText));
+        StartCoroutine(ThankYouTextCoroutine());
     }
 
-    private IEnumerator ThankYouTextCoroutine(string achievedEndingText)
+    private IEnumerator ThankYouTextCoroutine()
     {
         yield return new WaitForSeconds(1.5f);
         thankYouText.SetActive(true);
@@ -100,7 +100,6 @@ public class UI : MonoBehaviour
 
     private IEnumerator ReturnToMainMenuCoroutine()
     {
-        GameManager.instance.PauseGame(false);
         fadeScreen.FadeOut();
         yield return new WaitForSeconds(1.5f);
         SceneManager.LoadScene("MainMenu");
