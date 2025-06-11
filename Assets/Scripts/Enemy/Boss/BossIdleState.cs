@@ -26,7 +26,7 @@ public class BossIdleState : BossGroundedState
 
         if (detection.collider != null)
         {
-            boss.EnterBattleState();
+            stateMachine.ChangeState(boss.BattleState);
             return;
         }
 

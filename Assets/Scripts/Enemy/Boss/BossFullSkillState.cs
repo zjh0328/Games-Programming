@@ -19,7 +19,7 @@ public class BossFullSkillState : EnemyState
 
     private IEnumerator ExecuteFullSkill()
     {
-        yield return new WaitForSeconds(1.4f);
+        yield return new WaitForSeconds(1.2f);
         stateMachine.ChangeState(boss.BattleState);
     }
 

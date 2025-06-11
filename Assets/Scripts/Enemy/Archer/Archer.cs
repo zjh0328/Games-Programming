@@ -98,4 +98,5 @@ public class Archer : Enemy
     {
         base.OnDrawGizmos();
     }
+    
 }

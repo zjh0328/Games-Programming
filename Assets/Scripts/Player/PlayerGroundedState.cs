@@ -26,9 +26,10 @@ public class PlayerGroundedState : PlayerState
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && Time.time >= player.lastAttackTime + player.attackCooldown)
         {
             stateMachine.ChangeState(player.attackState);
+            player.lastAttackTime = Time.time;
             return;
         }
 

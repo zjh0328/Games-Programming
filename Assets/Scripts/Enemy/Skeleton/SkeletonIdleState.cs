@@ -12,7 +12,8 @@ public class SkeletonIdleState : SkeletonGroundedState
     public override void Enter()
     {
         base.Enter();
-        DelayTime = skeleton.patrolTime;
+        DelayTime = 2f;
+        skeleton.SetVelocity(0, rb.velocity.y);
     }
 
     public override void Exit()
@@ -24,16 +25,21 @@ public class SkeletonIdleState : SkeletonGroundedState
     {
         base.Update();
 
-        if (stateMachine.CurrentState != skeleton.IdleState)
+        var detection = skeleton.IsPlayerDetected();
+
+        if (detection.collider != null)
         {
+            stateMachine.ChangeState(skeleton.BattleState);
             return;
         }
 
         skeleton.SetVelocity(0, rb.velocity.y);
 
-        if (DelayTime < 0)
+        if (DelayTime <= 0)
         {
-            skeleton.Flip();
+            int randomDir = Random.value < 0.5f ? -1 : 1;
+            if (skeleton.facingDirection != randomDir || !skeleton.IsGroundDetected())
+                skeleton.Flip(); 
             stateMachine.ChangeState(skeleton.MoveState);
         }
     }

@@ -31,6 +31,13 @@ public class SkeletonBattleState : EnemyState
 
     public override void Update()
     {
+        if (skeleton.isJumping)
+        {
+            skeleton.SetVelocity(skeleton.battleMoveSpeed * skeleton.facingDirection, rb.velocity.y);
+            ChangeToMoveAnimation();
+            return;
+        }
+
         base.Update();
 
         if (skeleton.stateMachine.CurrentState != this)
@@ -54,7 +61,7 @@ public class SkeletonBattleState : EnemyState
         else
         {
             float distanceToPlayer = Vector2.Distance(player.position, skeleton.transform.position);
-            if (DelayTime < 0 || distanceToPlayer > skeleton.playerScanDistance)
+            if (!skeleton.isJumping && (DelayTime < 0 || distanceToPlayer > skeleton.playerScanDistance))
             {
                 stateMachine.ChangeState(skeleton.IdleState);
                 return;
@@ -68,18 +75,29 @@ public class SkeletonBattleState : EnemyState
             return;
         }
 
-        moveDirection = player.position.x >= skeleton.transform.position.x ? 1 : -1;
+        moveDirection = skeleton.GetMoveDirectionToTarget(player);
 
-        if (!skeleton.IsGroundDetected())
+        if (skeleton.IsAtJumpPoint() && skeleton.CanJump())
         {
-            skeleton.SetVelocity(0, rb.velocity.y);
-            ChangeToIdleAnimation();
+            skeleton.Jump(skeleton.battleMoveSpeed * moveDirection, skeleton.jumpForce);
+            ChangeToMoveAnimation();
             return;
         }
 
-        skeleton.SetVelocity(skeleton.battleMoveSpeed * moveDirection, rb.velocity.y);
+        if (!skeleton.IsGroundDetected())
+        {
+            return;
+        }
+
+        if (!skeleton.isJumping && skeleton.IsGroundDetected())
+        {
+            skeleton.SetVelocity(skeleton.battleMoveSpeed * moveDirection, rb.velocity.y);
+        }
+
         ChangeToMoveAnimation();
     }
+
+
 
     private bool CanAttack()
     {

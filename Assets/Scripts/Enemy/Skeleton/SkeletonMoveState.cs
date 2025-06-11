@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SkeletonMoveState : SkeletonGroundedState
 {
+    private float moveDuration;
+
     public SkeletonMoveState(Enemy enemyBase, EnemyStateMachine stateMachine, string animBoolName, Skeleton skeletonRef)
         : base(enemyBase, stateMachine, animBoolName, skeletonRef)
     {
@@ -12,6 +14,7 @@ public class SkeletonMoveState : SkeletonGroundedState
     public override void Enter()
     {
         base.Enter();
+        moveDuration = Random.Range(2f, 8f);
     }
 
     public override void Exit()
@@ -22,16 +25,35 @@ public class SkeletonMoveState : SkeletonGroundedState
     public override void Update()
     {
         base.Update();
-
-        if (skeleton.stateMachine.CurrentState != this)
+        var detection = skeleton.IsPlayerDetected();
+        if (detection.collider != null)
+        {
+            stateMachine.ChangeState(skeleton.BattleState);
             return;
+        }
 
-        if (skeleton.IsWallDetected() || !skeleton.IsGroundDetected())
+        if (!skeleton.IsGroundDetected())
+        {
+            skeleton.SetVelocity(0, rb.velocity.y); 
+            stateMachine.ChangeState(skeleton.IdleState);
+            return;
+        }
+
+        moveDuration -= Time.deltaTime;
+
+        skeleton.SetVelocity(skeleton.patrolMoveSpeed * skeleton.facingDirection, rb.velocity.y);
+
+        if (moveDuration <= 0)
         {
             stateMachine.ChangeState(skeleton.IdleState);
             return;
         }
 
-        skeleton.SetVelocity(skeleton.patrolMoveSpeed * skeleton.facingDirection, rb.velocity.y);
+        if (skeleton.IsWallDetected() || !skeleton.IsGroundDetected())
+        {
+            skeleton.Flip();
+            stateMachine.ChangeState(skeleton.IdleState);
+            return;
+        }
     }
 }

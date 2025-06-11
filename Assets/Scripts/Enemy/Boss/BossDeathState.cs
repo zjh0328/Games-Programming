@@ -25,5 +25,6 @@ public class BossDeathState : EnemyState
     public override void Exit()
     {
         base.Exit();
+        boss.gameObject.SetActive(false);
     }
 }

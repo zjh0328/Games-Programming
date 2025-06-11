@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ArcherMoveState : ArcherGroundedState
 {
+    private float moveDuration;
     public ArcherMoveState(Enemy enemyBase, EnemyStateMachine stateMachine, string animBoolName, Archer archerRef)
         : base(enemyBase, stateMachine, animBoolName, archerRef)
     {
@@ -12,6 +13,7 @@ public class ArcherMoveState : ArcherGroundedState
     public override void Enter()
     {
         base.Enter();
+        moveDuration = Random.Range(2f, 8f);
     }
 
     public override void Exit()
@@ -22,9 +24,23 @@ public class ArcherMoveState : ArcherGroundedState
     public override void Update()
     {
         base.Update();
+        var detection = archer.IsPlayerDetected();
 
-        if (archer.stateMachine.CurrentState != this)
+        if (detection.collider != null)
+        {
+            stateMachine.ChangeState(archer.BattleState);
             return;
+        }
+
+        moveDuration -= Time.deltaTime;
+
+        archer.SetVelocity(archer.patrolMoveSpeed * archer.facingDirection, rb.velocity.y);
+
+        if (moveDuration <= 0)
+        {
+            stateMachine.ChangeState(archer.IdleState);
+            return;
+        }
 
         if (archer.IsWallDetected() || !archer.IsGroundDetected())
         {
@@ -32,6 +48,5 @@ public class ArcherMoveState : ArcherGroundedState
             return;
         }
 
-        archer.SetVelocity(archer.patrolMoveSpeed * archer.facingDirection, rb.velocity.y);
     }
 }

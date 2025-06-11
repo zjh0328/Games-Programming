@@ -12,7 +12,8 @@ public class ArcherIdleState : ArcherGroundedState
     public override void Enter()
     {
         base.Enter();
-        DelayTime = archer.patrolTime;
+        DelayTime = 2f; 
+        archer.SetVelocity(0, rb.velocity.y);
     }
 
     public override void Exit()
@@ -23,17 +24,21 @@ public class ArcherIdleState : ArcherGroundedState
     public override void Update()
     {
         base.Update();
+        var detection = archer.IsPlayerDetected();
 
-        if (stateMachine.CurrentState != archer.IdleState)
+        if (detection.collider != null)
         {
+            stateMachine.ChangeState(archer.BattleState);
             return;
         }
 
         archer.SetVelocity(0, rb.velocity.y);
 
-        if (DelayTime < 0)
+        if (DelayTime <= 0)
         {
-            archer.Flip();
+            int randomDir = Random.value < 0.5f ? -1 : 1;
+            if (archer.facingDirection != randomDir || !archer.IsGroundDetected())
+                archer.Flip(); 
             stateMachine.ChangeState(archer.MoveState);
         }
     }

@@ -70,10 +70,17 @@ public class GhostBattleState : EnemyState
 
         moveDirection = player.position.x >= ghost.transform.position.x ? 1 : -1;
 
+        if (ghost.IsAtJumpPoint() && ghost.CanJump())
+        {
+            ghost.Jump(ghost.battleMoveSpeed * moveDirection, ghost.jumpForce);
+            ChangeToMoveAnimation();
+            return;
+        }
+
         if (!ghost.IsGroundDetected())
         {
-            ghost.SetVelocity(0, rb.velocity.y);
-            ChangeToIdleAnimation();
+            ghost.SetVelocity(ghost.battleMoveSpeed * moveDirection, rb.velocity.y);
+            ChangeToMoveAnimation();
             return;
         }
 

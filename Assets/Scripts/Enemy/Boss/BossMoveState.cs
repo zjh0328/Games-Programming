@@ -19,6 +19,7 @@ public class BossMoveState : BossGroundedState
         base.Exit();
     }
 
+
     public override void Update()
     {
         base.Update();
@@ -27,13 +28,9 @@ public class BossMoveState : BossGroundedState
 
         if (detection.collider != null)
         {
-            boss.EnterBattleState();
+            stateMachine.ChangeState(boss.BattleState);
             return;
         }
-
-
-        if (boss.stateMachine.CurrentState != this)
-            return;
 
         if (boss.IsWallDetected() || !boss.IsGroundDetected())
         {

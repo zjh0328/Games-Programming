@@ -7,7 +7,7 @@ using UnityEngine;
 public class Enemy : Entity
 {
     [Header("PatrolMove")]
-    public float patrolMoveSpeed;
+    [SerializeField] public float patrolMoveSpeed;
     public float patrolTime;
 
     [Header("Scan")]
@@ -15,16 +15,36 @@ public class Enemy : Entity
     [SerializeField] protected LayerMask whatIsPlayer;
 
     [Header("Battle/Aggressive")]
-    public float battleMoveSpeed;
+    [SerializeField] public float battleMoveSpeed;
     public float aggressiveTime = 7;
 
     [Header("Attack")]
-    public float attackDistance = 2;
-    public float attackCooldown = 1.5f;
+    [SerializeField] public float attackDistance = 2;
+    [SerializeField] public float attackCooldown = 1.5f;
     [HideInInspector] public float lastTimeAttacked;
+
+    [Header("Jump Point")]
+    [SerializeField] private LayerMask whatIsJumpPoint;
+    [SerializeField] private float jumpPointCheckRadius = 1f;
+
+    [Header("Jump Settings")]
+    [SerializeField] public float jumpForce = 10f;
+    [SerializeField] private float lastJumpTime = 0f;
+    [SerializeField] public float jumpCooldown = 1f;
+
+    [Header("Level Growth Ratios")]
+    [SerializeField] private float patrolSpeedGrowthRatio = 0.1f;
+    [SerializeField] private float battleSpeedGrowthRatio = 0.1f;
+    [SerializeField] private float attackCooldownDecayRatio = 0.1f;
+    [SerializeField] private float minAttackCooldown = 0.2f;
+
+    private float basePatrolMoveSpeed;
+    private float baseBattleMoveSpeed;
+    private float baseAttackCooldown;
 
     protected Player player { get; private set; }
     public EnemyStateMachine stateMachine { get; private set; }
+    public bool isJumping { get; private set; } = false;
 
     private EnemyStats enemyStats;
 
@@ -33,6 +53,10 @@ public class Enemy : Entity
         base.Awake();
         stateMachine = new EnemyStateMachine();
         enemyStats = GetComponent<EnemyStats>();
+
+        basePatrolMoveSpeed = patrolMoveSpeed;
+        baseBattleMoveSpeed = battleMoveSpeed;
+        baseAttackCooldown = attackCooldown;
     }
 
     protected override void Start()
@@ -46,34 +70,22 @@ public class Enemy : Entity
     private void InitializeParametersBasedOnLevel()
     {
         int level = enemyStats.GetEnemyLevel();
+        float ratio = level - 1;
 
-        switch (level)
-        {
-            case 1: // Easy
-                patrolMoveSpeed = 2f;
-                battleMoveSpeed = 2.5f;
-                attackCooldown = 2f;
-                break;
-            case 2: // Normal
-                patrolMoveSpeed = 3f;
-                battleMoveSpeed = 3.5f;
-                attackCooldown = 1.5f;
-                break;
-            case 3: // Hard
-                patrolMoveSpeed = 4f;
-                battleMoveSpeed = 4.5f;
-                attackCooldown = 1f;
-                break;
-            default:
-                Debug.LogWarning($"Unknown enemy level: {level}, using default values.");
-                break;
-        }
+        patrolMoveSpeed = basePatrolMoveSpeed * (1f + patrolSpeedGrowthRatio * ratio);
+        battleMoveSpeed = baseBattleMoveSpeed * (1f + battleSpeedGrowthRatio * ratio);
+        attackCooldown = Mathf.Max(minAttackCooldown, baseAttackCooldown * Mathf.Pow(1f - attackCooldownDecayRatio, ratio));
     }
 
     protected override void Update()
     {
         base.Update();
         stateMachine.CurrentState.Update();
+
+        if (isJumping && IsGroundDetected() && Mathf.Abs(rb.velocity.y) < 0.01f)
+        {
+            isJumping = false;
+        }
     }
 
     public virtual RaycastHit2D IsPlayerDetected()
@@ -100,10 +112,9 @@ public class Enemy : Entity
             }
         }
     }
+
     public virtual void TriggerDoubleAttackHit() { }
-
     public virtual void TriggerFullSkillDamage() { }
-
 
     protected override void OnDrawGizmos()
     {
@@ -115,4 +126,27 @@ public class Enemy : Entity
     public virtual void EnterBattleState() { }
 
     protected virtual void InitializeLastTimeInfo() { }
+
+    public bool IsAtJumpPoint()
+    {
+        return Physics2D.OverlapCircle(transform.position, jumpPointCheckRadius, whatIsJumpPoint);
+    }
+
+    public bool CanJump()
+    {
+        return Time.time - lastJumpTime >= jumpCooldown && IsGroundDetected();
+    }
+
+    public void Jump(float horizontalForce, float verticalForce)
+    {
+        lastJumpTime = Time.time;
+        isJumping = true;
+        rb.velocity = new Vector2(horizontalForce, verticalForce);
+    }
+
+    public int GetMoveDirectionToTarget(Transform target)
+    {
+        return target.position.x >= transform.position.x ? 1 : -1;
+    }
+
 }

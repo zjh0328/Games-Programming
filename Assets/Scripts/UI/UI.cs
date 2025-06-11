@@ -87,11 +87,14 @@ public class UI : MonoBehaviour
 
     private IEnumerator ThankYouTextCoroutine()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSecondsRealtime(1.5f); 
         thankYouText.SetActive(true);
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSecondsRealtime(1.5f);
         returnToTitleButton.SetActive(true);
+        Time.timeScale = 0f; 
+
     }
+
 
     public void ReturnToMainMenu()
     {
@@ -100,8 +103,10 @@ public class UI : MonoBehaviour
 
     private IEnumerator ReturnToMainMenuCoroutine()
     {
+        Debug.Log("Fading out...");
         fadeScreen.FadeOut();
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSecondsRealtime(1.5f);
+        Debug.Log("Loading Main Menu...");
         SceneManager.LoadScene("MainMenu");
     }
 

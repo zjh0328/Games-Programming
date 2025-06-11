@@ -7,8 +7,16 @@ public class Player : Entity
 
     [HideInInspector] public float lastArrowShootTime;
 
+    [Header("Defend Cooldown")]
+    public float defendCooldown = 1f;
+    [HideInInspector] public float lastDefendTime;
+
+    [Header("Attack Cooldown")]
+    public float attackCooldown = 0.5f;
+    [HideInInspector] public float lastAttackTime;
+
     [Header("Arrow Cooldown")]
-    public float arrowCooldown = 0.5f; 
+    public float arrowCooldown = 2f; 
 
     [Header("Move")]
     public float moveSpeed;
@@ -113,8 +121,11 @@ public class Player : Entity
             lastArrowShootTime = Time.time;
         }
 
-        if (Input.GetKeyDown(KeyCode.N))
+        if (Input.GetKeyDown(KeyCode.N) && Time.time >= lastDefendTime + defendCooldown)
+        {
             stateMachine.ChangeState(defendState);
+            lastDefendTime = Time.time;
+        }
     }
 
     private void CheckForDashInput()

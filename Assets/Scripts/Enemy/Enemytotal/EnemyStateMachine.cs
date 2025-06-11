@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyStateMachine
 {
+    private float lastStateChangeTime = 0f;
+    private float minStateInterval = 0.05f;
     public EnemyState CurrentState { get; private set; }
 
     public void Initialize(EnemyState startState)
@@ -14,8 +16,12 @@ public class EnemyStateMachine
 
     public void ChangeState(EnemyState newState)
     {
-        CurrentState.Exit();
+        if (Time.time - lastStateChangeTime < minStateInterval)
+            return;
+
+        CurrentState?.Exit();
         CurrentState = newState;
         CurrentState.Enter();
+        lastStateChangeTime = Time.time;
     }
 }
