@@ -26,6 +26,11 @@ public class GhostGroundedState : EnemyState
 
     public override void Update()
     {
+        if (ghost.isDead)
+        {
+            stateMachine.ChangeState(ghost.DeathState); 
+            return;
+        }
         base.Update();
 
         if (ShouldEnterBattleState())

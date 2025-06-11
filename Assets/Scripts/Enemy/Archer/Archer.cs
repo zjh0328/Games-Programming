@@ -23,7 +23,7 @@ public class Archer : Enemy
 
         IdleState = new ArcherIdleState(this, stateMachine, "Idle", this);
         MoveState = new ArcherMoveState(this, stateMachine, "Move", this);
-        BattleState = new ArcherBattleState(this, stateMachine, "Idle", this);
+        BattleState = new ArcherBattleState(this, stateMachine, "Move", this);
         AttackState = new ArcherAttackState(this, stateMachine, "Attack", this);
         DeathState = new ArcherDeathState(this, stateMachine, "Idle", this);
     }

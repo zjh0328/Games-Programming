@@ -31,7 +31,28 @@ public class GhostBattleState : EnemyState
 
     public override void Update()
     {
+        if (ghost.isDead)
+        {
+            stateMachine.ChangeState(ghost.DeathState); 
+            return;
+        }
+        if (ghost.isJumping)
+        {
+            ghost.SetVelocity(ghost.battleMoveSpeed * ghost.facingDirection, rb.velocity.y);
+            ChangeToMoveAnimation();
+            return;
+        }
+
         base.Update();
+
+        float distanceToPlayer = Vector2.Distance(player.position, ghost.transform.position);
+
+        if (distanceToPlayer <= ghost.attackDistance && CanAttack())
+        {
+            ChangeToIdleAnimation();
+            stateMachine.ChangeState(ghost.AttackState);
+            return;
+        }
 
         if (ghost.stateMachine.CurrentState != this)
             return;
@@ -53,8 +74,8 @@ public class GhostBattleState : EnemyState
         }
         else
         {
-            float distanceToPlayer = Vector2.Distance(player.position, ghost.transform.position);
-            if (DelayTime < 0 || distanceToPlayer > ghost.playerScanDistance)
+            float distance = Vector2.Distance(player.position, ghost.transform.position);
+            if (!ghost.isJumping && (DelayTime < 0 || distance > ghost.playerScanDistance))
             {
                 stateMachine.ChangeState(ghost.IdleState);
                 return;
@@ -68,7 +89,7 @@ public class GhostBattleState : EnemyState
             return;
         }
 
-        moveDirection = player.position.x >= ghost.transform.position.x ? 1 : -1;
+        moveDirection = ghost.GetMoveDirectionToTarget(player);
 
         if (ghost.IsAtJumpPoint() && ghost.CanJump())
         {
@@ -79,12 +100,25 @@ public class GhostBattleState : EnemyState
 
         if (!ghost.IsGroundDetected())
         {
-            ghost.SetVelocity(ghost.battleMoveSpeed * moveDirection, rb.velocity.y);
-            ChangeToMoveAnimation();
             return;
         }
 
-        ghost.SetVelocity(ghost.battleMoveSpeed * moveDirection, rb.velocity.y);
+        float distanceToPlayerX = Mathf.Abs(player.position.x - ghost.transform.position.x);
+
+        if (!ghost.isJumping && ghost.IsGroundDetected())
+        {
+            if (distanceToPlayerX > ghost.stopApproachDistance)
+            {
+                ghost.SetVelocity(ghost.battleMoveSpeed * moveDirection, rb.velocity.y);
+                ChangeToMoveAnimation();
+            }
+            else
+            {
+                ghost.SetVelocity(0, rb.velocity.y); 
+                ChangeToIdleAnimation(); 
+            }
+        }
+
         ChangeToMoveAnimation();
     }
 

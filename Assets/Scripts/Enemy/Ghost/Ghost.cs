@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class Ghost : Enemy
 {
+    [Header("StopDistance")]
+    [SerializeField]public float stopApproachDistance = 3.5f;
+
     [Header("Explosion On Death")]
     [SerializeField] private float explosionRadius;
     [SerializeField] private float explosionDamage;
+    public bool isDead = false;
 
     #region States
     public GhostIdleState IdleState { get; private set; }
@@ -22,7 +26,7 @@ public class Ghost : Enemy
 
         IdleState = new GhostIdleState(this, stateMachine, "Idle", this);
         MoveState = new GhostMoveState(this, stateMachine, "Move", this);
-        BattleState = new GhostBattleState(this, stateMachine, "Idle", this);
+        BattleState = new GhostBattleState(this, stateMachine, "Move", this);
         AttackState = new GhostAttackState(this, stateMachine, "Attack", this);
         DeathState = new GhostDeathState(this, stateMachine, "Death", this);
     }
@@ -41,7 +45,11 @@ public class Ghost : Enemy
 
     public override void Die()
     {
-        base.Die();
+        if (isDead) return;
+        isDead = true;
+
+        rb.velocity = Vector2.zero;
+        anim.SetTrigger("Death");
         stateMachine.ChangeState(DeathState);
     }
 
@@ -60,7 +68,7 @@ public class Ghost : Enemy
 
     public override void SpecialAttackTrigger()
     {
-       Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius, whatIsPlayer);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius, whatIsPlayer);
 
         foreach (var hit in hits)
         {
@@ -69,6 +77,8 @@ public class Ghost : Enemy
                 playerStats.TakeDamage((int)explosionDamage, transform, transform);
             }
         }
+        
+        Destroy(gameObject);
     }
 
     public override void AttackTrigger()

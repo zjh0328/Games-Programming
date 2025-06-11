@@ -12,7 +12,7 @@ public class Player : Entity
     [HideInInspector] public float lastDefendTime;
 
     [Header("Attack Cooldown")]
-    public float attackCooldown = 0.5f;
+    public float attackCooldown = 0.1f;
     [HideInInspector] public float lastAttackTime;
 
     [Header("Arrow Cooldown")]

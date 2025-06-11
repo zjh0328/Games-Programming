@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Boss : Enemy
 {
+    [Header("StopDistance")]
+    [SerializeField]public float stopApproachDistance = 3f;
+
     [Header("Full screen skill")]
     [SerializeField] private float FullDamage;
 

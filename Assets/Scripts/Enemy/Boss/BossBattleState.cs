@@ -23,9 +23,9 @@ public class BossBattleState : EnemyState
 
         FacePlayer();
 
-        if (player == null || player.GetComponent<PlayerStats>().currentHP <= 0)
+        if (player.GetComponent<PlayerStats>().isDead)
         {
-            return; 
+            stateMachine.ChangeState(boss.MoveState);
         }
 
     }
@@ -34,13 +34,6 @@ public class BossBattleState : EnemyState
     {
         base.Update();
 
-        if (boss.stateMachine.CurrentState != this)
-            return;
-
-        FacePlayer();
-
-        var detection = boss.IsPlayerDetected();
-
         if (boss.CanUseFullSkill())
         {
             boss.MarkFullSkillUsed();
@@ -48,6 +41,30 @@ public class BossBattleState : EnemyState
             stateMachine.ChangeState(boss.FullSkillState);
             return;
         }
+
+        float distance = Vector2.Distance(player.position, boss.transform.position);
+
+        if (distance <= boss.attackDistance && CanAttack())
+        {
+            ChangeToIdleAnimation();
+            if (Random.value < 0.3f)
+            {
+                stateMachine.ChangeState(boss.DoubleAttackState);
+            }
+            else
+            {
+                stateMachine.ChangeState(boss.AttackState);
+            }
+
+            return;
+        }
+
+        if (boss.stateMachine.CurrentState != this)
+            return;
+
+        FacePlayer();
+
+        var detection = boss.IsPlayerDetected();
 
         if (detection.collider != null)
         {
@@ -84,16 +101,28 @@ public class BossBattleState : EnemyState
             return;
         }
 
-        moveDirection = player.position.x >= boss.transform.position.x ? 1 : -1;
+        moveDirection = boss.GetMoveDirectionToTarget(player);
 
         if (!boss.IsGroundDetected())
         {
-            boss.SetVelocity(0, rb.velocity.y);
-            ChangeToIdleAnimation();
             return;
         }
 
-        boss.SetVelocity(boss.battleMoveSpeed * moveDirection, rb.velocity.y);
+        float distanceToPlayerX = Mathf.Abs(player.position.x - boss.transform.position.x);
+
+        if (!boss.isJumping && boss.IsGroundDetected())
+        {
+            if (distanceToPlayerX > boss.stopApproachDistance)
+            {
+                boss.SetVelocity(boss.battleMoveSpeed * moveDirection, rb.velocity.y);
+                ChangeToMoveAnimation();
+            }
+            else
+            {
+                boss.SetVelocity(0, rb.velocity.y); 
+                ChangeToIdleAnimation(); 
+            }
+        }
         ChangeToMoveAnimation();
     }
 

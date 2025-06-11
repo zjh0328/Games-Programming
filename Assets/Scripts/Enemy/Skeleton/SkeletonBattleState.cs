@@ -40,6 +40,15 @@ public class SkeletonBattleState : EnemyState
 
         base.Update();
 
+        float distanceToPlayer = Vector2.Distance(player.position, skeleton.transform.position);
+
+        if (distanceToPlayer <= skeleton.attackDistance && CanAttack())
+        {
+            ChangeToIdleAnimation();
+            stateMachine.ChangeState(skeleton.AttackState);
+            return;
+        }
+
         if (skeleton.stateMachine.CurrentState != this)
             return;
 
@@ -51,7 +60,7 @@ public class SkeletonBattleState : EnemyState
         {
             DelayTime = skeleton.aggressiveTime;
 
-            if (detection.distance < skeleton.attackDistance && CanAttack())
+            if ((detection.distance < skeleton.attackDistance) && CanAttack())
             {
                 ChangeToIdleAnimation();
                 stateMachine.ChangeState(skeleton.AttackState);
@@ -60,8 +69,8 @@ public class SkeletonBattleState : EnemyState
         }
         else
         {
-            float distanceToPlayer = Vector2.Distance(player.position, skeleton.transform.position);
-            if (!skeleton.isJumping && (DelayTime < 0 || distanceToPlayer > skeleton.playerScanDistance))
+            float distance = Vector2.Distance(player.transform.position, skeleton.transform.position);
+            if (!skeleton.isJumping && (DelayTime < 0 || distance > skeleton.playerScanDistance))
             {
                 stateMachine.ChangeState(skeleton.IdleState);
                 return;
@@ -69,7 +78,7 @@ public class SkeletonBattleState : EnemyState
         }
 
         if (detection.collider != null &&
-            Vector2.Distance(skeleton.transform.position, player.position) < skeleton.attackDistance)
+            Vector2.Distance(skeleton.transform.position, player.transform.position) < skeleton.attackDistance)
         {
             ChangeToIdleAnimation();
             return;
@@ -89,10 +98,22 @@ public class SkeletonBattleState : EnemyState
             return;
         }
 
+        float distanceToPlayerX = Mathf.Abs(player.position.x - skeleton.transform.position.x);
+
         if (!skeleton.isJumping && skeleton.IsGroundDetected())
         {
-            skeleton.SetVelocity(skeleton.battleMoveSpeed * moveDirection, rb.velocity.y);
+            if (distanceToPlayerX > skeleton.stopApproachDistance)
+            {
+                skeleton.SetVelocity(skeleton.battleMoveSpeed * moveDirection, rb.velocity.y);
+                ChangeToMoveAnimation();
+            }
+            else
+            {
+                skeleton.SetVelocity(0, rb.velocity.y); 
+                ChangeToIdleAnimation(); 
+            }
         }
+
 
         ChangeToMoveAnimation();
     }
