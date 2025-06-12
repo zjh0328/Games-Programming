@@ -37,7 +37,8 @@ public class BossBattleState : EnemyState
         if (boss.CanUseFullSkill())
         {
             boss.MarkFullSkillUsed();
-            ChangeToIdleAnimation();
+            anim.SetBool("Idle", false);
+            anim.SetBool("Move", false);
             stateMachine.ChangeState(boss.FullSkillState);
             return;
         }
@@ -46,7 +47,8 @@ public class BossBattleState : EnemyState
 
         if (distance <= boss.attackDistance && CanAttack())
         {
-            ChangeToIdleAnimation();
+            anim.SetBool("Idle", false);
+            anim.SetBool("Move", false);
             if (Random.value < 0.3f)
             {
                 stateMachine.ChangeState(boss.DoubleAttackState);
@@ -71,7 +73,8 @@ public class BossBattleState : EnemyState
             DelayTime = boss.aggressiveTime;
             if (detection.distance < boss.attackDistance && CanAttack())
             {
-                ChangeToIdleAnimation();
+                anim.SetBool("Idle", false);
+                anim.SetBool("Move", false);
                 if (Random.value < 0.3f)
                 {
                     stateMachine.ChangeState(boss.DoubleAttackState);
@@ -123,12 +126,17 @@ public class BossBattleState : EnemyState
                 ChangeToIdleAnimation(); 
             }
         }
-        ChangeToMoveAnimation();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        boss.TryEnterFullSkillState();
     }
 
     private bool CanAttack()
     {
-        return Time.time - boss.lastTimeAttacked >= boss.attackCooldown && !boss.isKnockbacked && Mathf.Abs(rb.velocity.y) <= 0.1f;
+        return Time.time - boss.lastTimeAttacked >= boss.attackCooldown && Mathf.Abs(rb.velocity.y) <= 0.1f;
     }
 
     private void ChangeToIdleAnimation()

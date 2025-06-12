@@ -12,11 +12,14 @@ public class BossIdleState : BossGroundedState
     public override void Enter()
     {
         base.Enter();
+        DelayTime = 2f; 
+        boss.SetVelocity(0, rb.velocity.y);
     }
 
     public override void Exit()
     {
         base.Exit();
+        boss.TryEnterFullSkillState();
     }
 
     public override void Update()
@@ -31,5 +34,15 @@ public class BossIdleState : BossGroundedState
         }
 
         boss.SetVelocity(0, rb.velocity.y);
+
+        if (DelayTime <= 0)
+        {
+            int randomDir = Random.value < 0.5f ? -1 : 1;
+            if (boss.facingDirection != randomDir || !boss.IsGroundDetected())
+            {
+                boss.Flip(); 
+            }
+            stateMachine.ChangeState(boss.MoveState);
+        }
     }
 }

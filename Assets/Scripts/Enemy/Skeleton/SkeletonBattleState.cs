@@ -40,17 +40,18 @@ public class SkeletonBattleState : EnemyState
 
         base.Update();
 
+        if (skeleton.stateMachine.CurrentState != this)
+        return;
+
         float distanceToPlayer = Vector2.Distance(player.position, skeleton.transform.position);
 
         if (distanceToPlayer <= skeleton.attackDistance && CanAttack())
         {
-            ChangeToIdleAnimation();
+            anim.SetBool("Idle", false);
+            anim.SetBool("Move", false);
             stateMachine.ChangeState(skeleton.AttackState);
             return;
         }
-
-        if (skeleton.stateMachine.CurrentState != this)
-            return;
 
         FacePlayer();
 
@@ -62,7 +63,8 @@ public class SkeletonBattleState : EnemyState
 
             if ((detection.distance < skeleton.attackDistance) && CanAttack())
             {
-                ChangeToIdleAnimation();
+                anim.SetBool("Idle", false);
+                anim.SetBool("Move", false);
                 stateMachine.ChangeState(skeleton.AttackState);
                 return;
             }
@@ -113,9 +115,6 @@ public class SkeletonBattleState : EnemyState
                 ChangeToIdleAnimation(); 
             }
         }
-
-
-        ChangeToMoveAnimation();
     }
 
 

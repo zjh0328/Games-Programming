@@ -13,7 +13,7 @@ public class BossDeathState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        boss.SetVelocity(0, rb.velocity.y);
+        boss.anim.speed = 0;
         UI.instance.SwitchToThankYouText();
     }
 

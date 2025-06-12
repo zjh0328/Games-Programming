@@ -23,21 +23,14 @@ public class BossAttackState : EnemyState
     {
         base.Exit();
         boss.lastTimeAttacked = Time.time;
+        boss.TryEnterFullSkillState();
     }
 
     public override void Update()
     {
         base.Update();
 
-        if (DelayTime > 0)
-        {
-            if (boss.isKnockbacked)
-            {
-                DelayTime = 0;
-                return;
-            }
-        }
-        else
+        if (DelayTime <= 0)
         {
             boss.SetVelocity(0, rb.velocity.y);
         }

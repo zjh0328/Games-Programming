@@ -5,7 +5,7 @@ using UnityEngine;
 public class Boss : Enemy
 {
     [Header("StopDistance")]
-    [SerializeField]public float stopApproachDistance = 3f;
+    [SerializeField] public float stopApproachDistance = 3f;
 
     [Header("Full screen skill")]
     [SerializeField] private float FullDamage;
@@ -21,6 +21,7 @@ public class Boss : Enemy
     #endregion
 
     private bool fullSkillReleased = false;
+    private bool fullSkillPending = false;
 
     protected override void Awake()
     {
@@ -28,7 +29,7 @@ public class Boss : Enemy
 
         IdleState = new BossIdleState(this, stateMachine, "Idle", this);
         MoveState = new BossMoveState(this, stateMachine, "Move", this);
-        BattleState = new BossBattleState(this, stateMachine, "Idle", this);
+        BattleState = new BossBattleState(this, stateMachine, "Move", this);
         AttackState = new BossAttackState(this, stateMachine, "Attack", this);
         DeathState = new BossDeathState(this, stateMachine, "Death", this);
         DoubleAttackState = new BossDoubleAttackState(this, stateMachine, "DoubleAttack", this);
@@ -45,6 +46,7 @@ public class Boss : Enemy
     protected override void Update()
     {
         base.Update();
+        CheckFullSkillPending();
     }
 
     public override void Die()
@@ -76,7 +78,7 @@ public class Boss : Enemy
 
         foreach (PlayerStats player in allPlayers)
         {
-            player.TakeDamage((int)FullDamage, transform, transform); 
+            player.TakeDamage((int)FullDamage, transform, transform);
         }
     }
 
@@ -92,5 +94,23 @@ public class Boss : Enemy
     private void OnDrawGizmosSelected()
     {
         base.OnDrawGizmos();
+    }
+    
+    public void CheckFullSkillPending()
+    {
+        if (!fullSkillReleased && stats.currentHP <= stats.maxHP * 0.5f)
+        {
+            fullSkillPending = true;
+        }
+    }
+
+    public void TryEnterFullSkillState()
+    {
+        if (fullSkillPending && !fullSkillReleased)
+        {
+            fullSkillPending = false;
+            fullSkillReleased = true;
+            stateMachine.ChangeState(FullSkillState);
+        }
     }
 }

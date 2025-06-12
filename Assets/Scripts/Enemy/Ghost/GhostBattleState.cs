@@ -49,7 +49,8 @@ public class GhostBattleState : EnemyState
 
         if (distanceToPlayer <= ghost.attackDistance && CanAttack())
         {
-            ChangeToIdleAnimation();
+            anim.SetBool("Idle", false);
+            anim.SetBool("Move", false);
             stateMachine.ChangeState(ghost.AttackState);
             return;
         }
@@ -67,7 +68,8 @@ public class GhostBattleState : EnemyState
 
             if (detection.distance < ghost.attackDistance && CanAttack())
             {
-                ChangeToIdleAnimation();
+                anim.SetBool("Idle", false);
+                anim.SetBool("Move", false);
                 stateMachine.ChangeState(ghost.AttackState);
                 return;
             }
@@ -118,8 +120,6 @@ public class GhostBattleState : EnemyState
                 ChangeToIdleAnimation(); 
             }
         }
-
-        ChangeToMoveAnimation();
     }
 
     private bool CanAttack()

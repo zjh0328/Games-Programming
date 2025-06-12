@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Ghost : Enemy
 {
+    public bool isDead = false;
     [Header("StopDistance")]
     [SerializeField]public float stopApproachDistance = 3.5f;
 
     [Header("Explosion On Death")]
     [SerializeField] private float explosionRadius;
     [SerializeField] private float explosionDamage;
-    public bool isDead = false;
 
     #region States
     public GhostIdleState IdleState { get; private set; }
