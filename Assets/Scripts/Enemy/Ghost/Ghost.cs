@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Ghost : Enemy
 {
-    [Header("StopDistance")]
-    [SerializeField]public float stopApproachDistance = 3.5f;
 
     [Header("Explosion On Death")]
     [SerializeField] private float explosionRadius;

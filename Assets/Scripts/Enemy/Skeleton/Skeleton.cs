@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Skeleton : Enemy
 {
-    [Header("StopDistance")]
-    [SerializeField]public float stopApproachDistance = 2.5f;
-
     #region States
     public SkeletonIdleState IdleState { get; private set; }
     public SkeletonMoveState MoveState { get; private set; }

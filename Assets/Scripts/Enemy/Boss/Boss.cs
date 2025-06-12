@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Boss : Enemy
 {
-    [Header("StopDistance")]
-    [SerializeField] public float stopApproachDistance = 3f;
 
     [Header("Full screen skill")]
     [SerializeField] private float FullDamage;
@@ -21,7 +19,6 @@ public class Boss : Enemy
     #endregion
 
     private bool fullSkillReleased = false;
-    private bool fullSkillPending = false;
 
     protected override void Awake()
     {
@@ -46,7 +43,6 @@ public class Boss : Enemy
     protected override void Update()
     {
         base.Update();
-        CheckFullSkillPending();
     }
 
     public override void Die()
@@ -98,21 +94,4 @@ public class Boss : Enemy
         base.OnDrawGizmos();
     }
     
-    public void CheckFullSkillPending()
-    {
-        if (!fullSkillReleased && stats.currentHP <= stats.maxHP * 0.5f)
-        {
-            fullSkillPending = true;
-        }
-    }
-
-    public void TryEnterFullSkillState()
-    {
-        if (fullSkillPending && !fullSkillReleased)
-        {
-            fullSkillPending = false;
-            fullSkillReleased = true;
-            stateMachine.ChangeState(FullSkillState);
-        }
-    }
 }

@@ -14,18 +14,26 @@ public class BossDoubleAttackState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        boss.StartCoroutine(PerformDoubleAttack());
+        DelayTime = 0.1f;
     }
 
-    private IEnumerator PerformDoubleAttack()
+     public override void Update()
     {
-        yield return new WaitForSeconds(1f);
-        stateMachine.ChangeState(boss.BattleState);
+        base.Update();
+        if (DelayTime <= 0)
+        {
+            boss.SetVelocity(0, rb.velocity.y);
+        }
+        if (triggerCalled)
+        {
+            stateMachine.ChangeState(boss.BattleState);
+        }
     }
+
 
     public override void Exit()
     {
         base.Exit();
-        boss.TryEnterFullSkillState();
+        boss.lastTimeAttacked = Time.time;
     }
 }

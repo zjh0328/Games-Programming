@@ -15,7 +15,6 @@ public class SkeletonAttackState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        DelayTime = 0.1f;
     }
 
     public override void Exit()
@@ -27,19 +26,6 @@ public class SkeletonAttackState : EnemyState
     public override void Update()
     {
         base.Update();
-
-        if (DelayTime > 0)
-        {
-            if (skeleton.isKnockbacked)
-            {
-                DelayTime = 0;
-                return;
-            }
-        }
-        else
-        {
-            skeleton.SetVelocity(0, rb.velocity.y);
-        }
 
         if (triggerCalled)
         {

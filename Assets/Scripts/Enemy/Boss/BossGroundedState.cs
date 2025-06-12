@@ -39,7 +39,7 @@ public class BossGroundedState : EnemyState
         if (player == null) return false;
 
         bool playerDetected = boss.IsPlayerDetected();
-        bool playerCloseEnough = Vector2.Distance(player.position, boss.transform.position) < boss.playerScanDistance;
+        bool playerCloseEnough = Vector2.Distance(player.position, boss.transform.position) < boss.CloseDistance;
         bool playerAlive = player.GetComponent<PlayerStats>()?.isDead == false;
 
         return (playerDetected || playerCloseEnough) && playerAlive;

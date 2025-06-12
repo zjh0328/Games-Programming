@@ -20,17 +20,12 @@ public class Enemy : Entity
 
     [Header("Attack")]
     [SerializeField] public float attackDistance = 2;
+    [SerializeField] public float CloseDistance = 2;
     [SerializeField] public float attackCooldown = 1.5f;
     [HideInInspector] public float lastTimeAttacked;
 
-    [Header("Jump Point")]
-    [SerializeField] private LayerMask whatIsJumpPoint;
-    [SerializeField] private float jumpPointCheckRadius = 1f;
-
     [Header("Jump Settings")]
     [SerializeField] public float jumpForce = 10f;
-    [SerializeField] private float lastJumpTime = 0f;
-    [SerializeField] public float jumpCooldown = 1f;
 
     [Header("Level Growth Ratios")]
     [SerializeField] private float patrolSpeedGrowthRatio = 0.1f;
@@ -127,19 +122,9 @@ public class Enemy : Entity
 
     protected virtual void InitializeLastTimeInfo() { }
 
-    public bool IsAtJumpPoint()
-    {
-        return Physics2D.OverlapCircle(transform.position, jumpPointCheckRadius, whatIsJumpPoint);
-    }
-
-    public bool CanJump()
-    {
-        return Time.time - lastJumpTime >= jumpCooldown && IsGroundDetected();
-    }
 
     public void Jump(float horizontalForce, float verticalForce)
     {
-        lastJumpTime = Time.time;
         isJumping = true;
         rb.velocity = new Vector2(horizontalForce, verticalForce);
     }

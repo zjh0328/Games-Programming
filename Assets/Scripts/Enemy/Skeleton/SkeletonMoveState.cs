@@ -25,21 +25,19 @@ public class SkeletonMoveState : SkeletonGroundedState
     public override void Update()
     {
         base.Update();
-        var detection = skeleton.IsPlayerDetected();
-        if (detection.collider != null)
+        
+        if (skeleton.stateMachine.CurrentState != this)
         {
-            stateMachine.ChangeState(skeleton.BattleState);
-            return;
-        }
-
-        if (!skeleton.IsGroundDetected())
-        {
-            skeleton.SetVelocity(0, rb.velocity.y); 
-            stateMachine.ChangeState(skeleton.IdleState);
             return;
         }
 
         moveDuration -= Time.deltaTime;
+
+        if (skeleton.IsWallDetected() || !skeleton.IsGroundDetected())
+        {
+            stateMachine.ChangeState(skeleton.IdleState);
+            return;
+        }
 
         skeleton.SetVelocity(skeleton.patrolMoveSpeed * skeleton.facingDirection, rb.velocity.y);
 
@@ -48,12 +46,6 @@ public class SkeletonMoveState : SkeletonGroundedState
             stateMachine.ChangeState(skeleton.IdleState);
             return;
         }
-
-        if (skeleton.IsWallDetected() || !skeleton.IsGroundDetected())
-        {
-            skeleton.Flip();
-            stateMachine.ChangeState(skeleton.IdleState);
-            return;
-        }
+        
     }
 }

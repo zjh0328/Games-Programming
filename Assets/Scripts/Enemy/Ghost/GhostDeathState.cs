@@ -14,6 +14,7 @@ public class GhostDeathState : EnemyState
     {
         base.Enter();
         ghost.SetVelocity(0, 0);
+        ghost.anim.SetTrigger("Death");
     }
 
     public override void Update()

@@ -23,7 +23,6 @@ public class BossAttackState : EnemyState
     {
         base.Exit();
         boss.lastTimeAttacked = Time.time;
-        boss.TryEnterFullSkillState();
     }
 
     public override void Update()

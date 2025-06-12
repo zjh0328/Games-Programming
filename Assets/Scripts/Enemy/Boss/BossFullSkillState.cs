@@ -14,13 +14,12 @@ public class BossFullSkillState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        boss.StartCoroutine(ExecuteFullSkill());
+        boss.anim.speed = 0;
     }
 
-    private IEnumerator ExecuteFullSkill()
+    public override void Update()
     {
-        yield return new WaitForSeconds(1f);
-        stateMachine.ChangeState(boss.BattleState);
+        base.Update();
     }
 
     public override void Exit()

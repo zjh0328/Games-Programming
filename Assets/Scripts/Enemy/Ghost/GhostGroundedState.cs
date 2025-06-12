@@ -39,7 +39,7 @@ public class GhostGroundedState : EnemyState
         if (player == null) return false;
 
         bool playerDetected = ghost.IsPlayerDetected();
-        bool playerCloseEnough = Vector2.Distance(player.position, ghost.transform.position) < ghost.playerScanDistance;
+        bool playerCloseEnough = Vector2.Distance(player.position, ghost.transform.position) < ghost.CloseDistance;
         bool playerAlive = player.GetComponent<PlayerStats>()?.isDead == false;
 
         return (playerDetected || playerCloseEnough) && playerAlive;

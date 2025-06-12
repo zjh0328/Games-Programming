@@ -31,15 +31,14 @@ public class SkeletonGroundedState : EnemyState
         if (ShouldEnterBattleState())
         {
             stateMachine.ChangeState(skeleton.BattleState);
+            return;
         }
     }
 
     private bool ShouldEnterBattleState()
     {
-        if (player == null) return false;
-
         bool playerDetected = skeleton.IsPlayerDetected();
-        bool playerCloseEnough = Vector2.Distance(player.position, skeleton.transform.position) < skeleton.playerScanDistance;
+        bool playerCloseEnough = Vector2.Distance(player.position, skeleton.transform.position) < skeleton.CloseDistance;
         bool playerAlive = player.GetComponent<PlayerStats>()?.isDead == false;
 
         return (playerDetected || playerCloseEnough) && playerAlive;

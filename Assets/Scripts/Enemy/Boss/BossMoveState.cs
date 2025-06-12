@@ -19,7 +19,6 @@ public class BossMoveState : BossGroundedState
     public override void Exit()
     {
         base.Exit();
-        boss.TryEnterFullSkillState();
     }
 
     public override void Update()

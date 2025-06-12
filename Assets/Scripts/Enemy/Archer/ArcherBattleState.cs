@@ -35,6 +35,13 @@ public class ArcherBattleState : EnemyState
 
     public override void Update()
     {
+        if(archer.stats.currentHP <= 0)
+        {
+            anim.SetBool("Idle", false);
+            anim.SetBool("Move", false);
+            stateMachine.ChangeState(archer.DeathState);
+            return;
+        }
         base.Update();
 
         if (archer.stateMachine.CurrentState != this)
