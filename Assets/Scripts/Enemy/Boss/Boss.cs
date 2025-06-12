@@ -70,10 +70,12 @@ public class Boss : Enemy
 
     public override void AttackTrigger()
     {
+        AudioManager.instance.PlaySFX(9, transform);
         base.AttackTrigger();
     }
     public override void TriggerFullSkillDamage()
     {
+        AudioManager.instance.PlaySFX(10, transform);
         PlayerStats[] allPlayers = FindObjectsOfType<PlayerStats>();
 
         foreach (PlayerStats player in allPlayers)

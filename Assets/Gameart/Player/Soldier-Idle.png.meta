@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: da8e55911b8559744b68a6cfe285f178
+guid: 044e4fb82afeb34408bc0c584409c5af
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,97 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GUI_0
+      name: Soldier-Idle_0
       rect:
         serializedVersion: 2
-        x: 145
-        y: 208
-        width: 46
-        height: 15
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 70c32014c2f53e84fbd96bef34266313
-      internalID: -608776601
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GUI_1
-      rect:
-        serializedVersion: 2
-        x: 2
-        y: 225
-        width: 45
-        height: 46
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8a48af97ca949104ba3d0ade88e26ac2
-      internalID: 1698828667
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GUI_2
-      rect:
-        serializedVersion: 2
-        x: 135
-        y: 276
-        width: 53
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a63635e546c3568498a3892a5c82f1dd
-      internalID: 1278165598
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GUI_3
-      rect:
-        serializedVersion: 2
-        x: 71
-        y: 278
-        width: 51
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: eed4072db4c8f934abec1ecfa093a2b0
-      internalID: -427470291
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GUI_4
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 243
-        width: 26
-        height: 26
+        x: 43
+        y: 48
+        width: 14
+        height: 14
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -208,8 +124,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 376f2185ef192da419bf61cd00cdc7db
-      internalID: 2027858100
+      spriteID: 106461757a5553c4d937596aa404d7aa
+      internalID: -2088793991
       vertices: []
       indices: 
       edges: []
@@ -225,11 +141,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      GUI_0: -608776601
-      GUI_1: 1698828667
-      GUI_2: 1278165598
-      GUI_3: -427470291
-      GUI_4: 2027858100
+      Soldier-Idle_0: -2088793991
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Ghost : Enemy
 {
-    public bool isDead = false;
     [Header("StopDistance")]
     [SerializeField]public float stopApproachDistance = 3.5f;
 
@@ -45,11 +44,7 @@ public class Ghost : Enemy
 
     public override void Die()
     {
-        if (isDead) return;
-        isDead = true;
-
-        rb.velocity = Vector2.zero;
-        anim.SetTrigger("Death");
+        base.Die();
         stateMachine.ChangeState(DeathState);
     }
 
@@ -68,6 +63,7 @@ public class Ghost : Enemy
 
     public override void SpecialAttackTrigger()
     {
+        AudioManager.instance.PlaySFX(11, transform);
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius, whatIsPlayer);
 
         foreach (var hit in hits)

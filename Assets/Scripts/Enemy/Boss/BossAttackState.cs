@@ -15,7 +15,7 @@ public class BossAttackState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        DelayTime = 0.2f;
+        DelayTime = 0.1f;
     }
 
 

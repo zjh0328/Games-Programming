@@ -13,7 +13,7 @@ public class GhostDeathState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        ghost.anim.speed = 0;
+        ghost.SetVelocity(0, 0);
     }
 
     public override void Update()

@@ -31,11 +31,6 @@ public class GhostBattleState : EnemyState
 
     public override void Update()
     {
-        if (ghost.isDead)
-        {
-            stateMachine.ChangeState(ghost.DeathState); 
-            return;
-        }
         if (ghost.isJumping)
         {
             ghost.SetVelocity(ghost.battleMoveSpeed * ghost.facingDirection, rb.velocity.y);
@@ -117,7 +112,7 @@ public class GhostBattleState : EnemyState
             else
             {
                 ghost.SetVelocity(0, rb.velocity.y); 
-                ChangeToIdleAnimation(); 
+                ChangeToIdleAnimation();
             }
         }
     }

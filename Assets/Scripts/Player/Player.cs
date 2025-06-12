@@ -32,10 +32,6 @@ public class Player : Entity
     public float dashDirection { get; private set; }
     private float defaultDashSpeed;
 
-    [Header("Attack")]
-    public Vector2[] attackMovement;
-    public float counterAttackDuration = 0.2f;
-
     [Header("Environment")]
     [SerializeField] private BoxCollider2D downablePlatformCheck;
     public GameObject arrowPrefab;

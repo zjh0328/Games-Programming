@@ -23,11 +23,6 @@ public class GhostMoveState : GhostGroundedState
 
     public override void Update()
     {
-        if (ghost.isDead)
-        {
-            stateMachine.ChangeState(ghost.DeathState); 
-            return;
-        }
         base.Update();
         var detection = ghost.IsPlayerDetected();
 
